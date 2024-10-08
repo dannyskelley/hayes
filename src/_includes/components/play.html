@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Checklist</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f0f8ff; /* Default background color */
+            background-size: cover;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        h1 {
+            background: #fff;
+            color: #007bff;
+            padding: 20px;
+            border-bottom: 4px solid #007bff;
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin: 0 auto;
+        }
+        li {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        button {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Morning Checklist</h1>
+    <div class="container">
+        <ul id="checklist">
+            <li><input type="checkbox" id="meditation"> <label for="meditation">🧘‍♂️ Meditation - Start your day with a few minutes of mindfulness.</label></li>
+            <li><input type="checkbox" id="brushTeeth"> <label for="brushTeeth">🪥 Brush Teeth - Essential for good oral hygiene.</label></li>
+            <li><input type="checkbox" id="drinkWater"> <label for="drinkWater">💧 Drink Water - Hydrate your body to boost energy.</label></li>
+            <li><input type="checkbox" id="shower"> <label for="shower">🚿 Shower - Refresh yourself to face the day.</label></li>
+            <li><input type="checkbox" id="gratitude"> <label for="gratitude">🙏 Gratitude - Reflect on what you’re thankful for.</label></li>
+        </ul>
+        <button onclick="saveProgress()">Save Progress</button>
+    </div>
+    <div id="particles-js"></div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            initializeParticles();
+        });
+
+        function saveProgress() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const checkedTasks = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.id);
+            localStorage.setItem('tasks', JSON.stringify(checkedTasks));
+            alert('Progress saved!');
+            checkAllTasks();
+        }
+
+        function loadProgress() {
+            const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = savedTasks.includes(checkbox.id);
+            });
+            checkAllTasks();
+        }
+
+        function checkAllTasks() {
+            const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            if (allChecked) {
+                document.getElementById('particles-js').style.display = 'block';
+            } else {
+                document.getElementById('particles-js').style.display = 'none';
+            }
+        }
+
+        function initializeParticles() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "repulse"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+    </script>
+</body>
+</html>
